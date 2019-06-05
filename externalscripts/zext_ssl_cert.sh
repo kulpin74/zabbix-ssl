@@ -35,10 +35,16 @@ fi
 
 case $f in
 -d)
-end_date=`openssl s_client -servername $servername -host $host -port $port -showcerts $starttls -prexit </dev/null 2>/dev/null |
-          sed -n '/BEGIN CERTIFICATE/,/END CERT/p' |
-          openssl x509 -text 2>/dev/null |
-          sed -n 's/ *Not After : *//p'`
+fix_broken_pipe=`openssl s_client -servername $servername -connect $host:$port -showcerts $starttls </dev/null 2>/dev/null |
+          sed -n '/BEGIN CERTIFICATE/,/END CERT/p'`
+
+end_date=`echo "$fix_broken_pipe" | openssl x509 -enddate -noout 2>/dev/null |
+          sed -n 's/notAfter=//p' |
+           sed 's/ GMT//g'`
+#end_date=`openssl s_client -servername $servername -host $host -port $port -showcerts $starttls -prexit </dev/null 2>/dev/null |
+#          sed -n '/BEGIN CERTIFICATE/,/END CERT/p' |
+#          openssl x509 -text 2>/dev/null |
+#          sed -n 's/ *Not After : *//p'`
 
 if [ -n "$end_date" ]
 then
@@ -49,10 +55,15 @@ fi
 ;;
 
 -i)
-issue_dn=`openssl s_client -servername $servername -host $host -port $port -showcerts $starttls -prexit </dev/null 2>/dev/null |
-          sed -n '/BEGIN CERTIFICATE/,/END CERT/p' |
-          openssl x509 -text 2>/dev/null |
-          sed -n 's/ *Issuer: *//p'`
+fix_broken_pipe=`openssl s_client -servername $servername -connect $host:$port -showcerts $starttls </dev/null 2>/dev/null |
+          sed -n '/BEGIN CERTIFICATE/,/END CERT/p'`
+
+issue_dn=`echo "$fix_broken_pipe" | openssl x509 -issuer -noout 2>/dev/null |
+          sed -n 's/issuer=//p'`
+#issue_dn=`openssl s_client -servername $servername -host $host -port $port -showcerts $starttls -prexit </dev/null 2>/dev/null |
+#          sed -n '/BEGIN CERTIFICATE/,/END CERT/p' |
+#          openssl x509 -text 2>/dev/null |
+#          sed -n 's/ *Issuer: *//p'`
 
 if [ -n "$issue_dn" ]
 then

@@ -7,7 +7,7 @@ fi
 
 domain=$1
 
-expiration_string=`whois "$domain" |  egrep -i 'Expiration|Expires on|Expiry date|paid-till' | head -1  | awk '{print $NF}'`
+expiration_string=`whois "$domain" 2>&1 |  egrep -i 'Expiration|Expires on|Expiry date|paid-till' | head -1  | awk '{print $NF}'`
 if [ $? -ne 0 ]; then
         echo "ERROR executing whois for the $domain domain - $expiration_string"
         exit 1

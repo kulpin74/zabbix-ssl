@@ -1,0 +1,605 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<zabbix_export>
+    <version>4.2</version>
+    <date>2020-08-24T21:54:33Z</date>
+    <groups>
+        <group>
+            <name>Templates</name>
+        </group>
+    </groups>
+    <templates>
+        <template>
+            <template>Template SSL check LLD</template>
+            <name>Template SSL check LLD</name>
+            <description/>
+            <groups>
+                <group>
+                    <name>Templates</name>
+                </group>
+            </groups>
+            <applications>
+                <application>
+                    <name>Domain checks</name>
+                </application>
+                <application>
+                    <name>HTTPS Service</name>
+                </application>
+                <application>
+                    <name>SSL Checks</name>
+                </application>
+            </applications>
+            <items/>
+            <discovery_rules>
+                <discovery_rule>
+                    <name>Domains discovery</name>
+                    <type>10</type>
+                    <snmp_community/>
+                    <snmp_oid/>
+                    <key>list.sh[&quot;ssl_check.json&quot;,&quot;1&quot;]</key>
+                    <delay>1h</delay>
+                    <status>0</status>
+                    <allowed_hosts/>
+                    <snmpv3_contextname/>
+                    <snmpv3_securityname/>
+                    <snmpv3_securitylevel>0</snmpv3_securitylevel>
+                    <snmpv3_authprotocol>0</snmpv3_authprotocol>
+                    <snmpv3_authpassphrase/>
+                    <snmpv3_privprotocol>0</snmpv3_privprotocol>
+                    <snmpv3_privpassphrase/>
+                    <params/>
+                    <ipmi_sensor/>
+                    <authtype>0</authtype>
+                    <username/>
+                    <password/>
+                    <publickey/>
+                    <privatekey/>
+                    <port/>
+                    <filter>
+                        <evaltype>0</evaltype>
+                        <formula/>
+                        <conditions/>
+                    </filter>
+                    <lifetime>60d</lifetime>
+                    <description>Discover domains for check via whois</description>
+                    <item_prototypes>
+                        <item_prototype>
+                            <name>Domain {#DOMAIN_NAME} expire in</name>
+                            <type>10</type>
+                            <snmp_community/>
+                            <snmp_oid/>
+                            <key>whois_expire.sh[{#DOMAIN_NAME}]</key>
+                            <delay>1d</delay>
+                            <history>90d</history>
+                            <trends>730d</trends>
+                            <status>0</status>
+                            <value_type>0</value_type>
+                            <allowed_hosts/>
+                            <units>day(s)</units>
+                            <snmpv3_contextname/>
+                            <snmpv3_securityname/>
+                            <snmpv3_securitylevel>0</snmpv3_securitylevel>
+                            <snmpv3_authprotocol>0</snmpv3_authprotocol>
+                            <snmpv3_authpassphrase/>
+                            <snmpv3_privprotocol>0</snmpv3_privprotocol>
+                            <snmpv3_privpassphrase/>
+                            <params/>
+                            <ipmi_sensor/>
+                            <authtype>0</authtype>
+                            <username/>
+                            <password/>
+                            <publickey/>
+                            <privatekey/>
+                            <port/>
+                            <description/>
+                            <inventory_link>0</inventory_link>
+                            <applications>
+                                <application>
+                                    <name>Domain checks</name>
+                                </application>
+                            </applications>
+                            <valuemap/>
+                            <logtimefmt/>
+                            <preprocessing/>
+                            <jmx_endpoint/>
+                            <timeout>3s</timeout>
+                            <url/>
+                            <query_fields/>
+                            <posts/>
+                            <status_codes>200</status_codes>
+                            <follow_redirects>1</follow_redirects>
+                            <post_type>0</post_type>
+                            <http_proxy/>
+                            <headers/>
+                            <retrieve_mode>0</retrieve_mode>
+                            <request_method>1</request_method>
+                            <output_format>0</output_format>
+                            <allow_traps>0</allow_traps>
+                            <ssl_cert_file/>
+                            <ssl_key_file/>
+                            <ssl_key_password/>
+                            <verify_peer>0</verify_peer>
+                            <verify_host>0</verify_host>
+                            <application_prototypes/>
+                            <master_item/>
+                        </item_prototype>
+                    </item_prototypes>
+                    <trigger_prototypes>
+                        <trigger_prototype>
+                            <expression>{Template SSL check LLD:whois_expire.sh[{#DOMAIN_NAME}].last()}&lt;=0</expression>
+                            <recovery_mode>0</recovery_mode>
+                            <recovery_expression/>
+                            <name>Domain {#DOMAIN_NAME} expired</name>
+                            <correlation_mode>0</correlation_mode>
+                            <correlation_tag/>
+                            <url/>
+                            <status>0</status>
+                            <priority>5</priority>
+                            <description/>
+                            <type>0</type>
+                            <manual_close>0</manual_close>
+                            <dependencies/>
+                            <tags/>
+                        </trigger_prototype>
+                        <trigger_prototype>
+                            <expression>{Template SSL check LLD:whois_expire.sh[{#DOMAIN_NAME}].last()}&lt;14</expression>
+                            <recovery_mode>0</recovery_mode>
+                            <recovery_expression/>
+                            <name>Domain {#DOMAIN_NAME} will expire in 14 days</name>
+                            <correlation_mode>0</correlation_mode>
+                            <correlation_tag/>
+                            <url/>
+                            <status>0</status>
+                            <priority>4</priority>
+                            <description/>
+                            <type>0</type>
+                            <manual_close>0</manual_close>
+                            <dependencies>
+                                <dependency>
+                                    <name>Domain {#DOMAIN_NAME} expired</name>
+                                    <expression>{Template SSL check LLD:whois_expire.sh[{#DOMAIN_NAME}].last()}&lt;=0</expression>
+                                    <recovery_expression/>
+                                </dependency>
+                            </dependencies>
+                            <tags/>
+                        </trigger_prototype>
+                        <trigger_prototype>
+                            <expression>{Template SSL check LLD:whois_expire.sh[{#DOMAIN_NAME}].last()}&lt;30</expression>
+                            <recovery_mode>0</recovery_mode>
+                            <recovery_expression/>
+                            <name>Domain {#DOMAIN_NAME} will expire in 30 days</name>
+                            <correlation_mode>0</correlation_mode>
+                            <correlation_tag/>
+                            <url/>
+                            <status>0</status>
+                            <priority>2</priority>
+                            <description/>
+                            <type>0</type>
+                            <manual_close>0</manual_close>
+                            <dependencies>
+                                <dependency>
+                                    <name>Domain {#DOMAIN_NAME} will expire in 14 days</name>
+                                    <expression>{Template SSL check LLD:whois_expire.sh[{#DOMAIN_NAME}].last()}&lt;14</expression>
+                                    <recovery_expression/>
+                                </dependency>
+                            </dependencies>
+                            <tags/>
+                        </trigger_prototype>
+                    </trigger_prototypes>
+                    <graph_prototypes/>
+                    <host_prototypes/>
+                    <jmx_endpoint/>
+                    <timeout>3s</timeout>
+                    <url/>
+                    <query_fields/>
+                    <posts/>
+                    <status_codes>200</status_codes>
+                    <follow_redirects>1</follow_redirects>
+                    <post_type>0</post_type>
+                    <http_proxy/>
+                    <headers/>
+                    <retrieve_mode>0</retrieve_mode>
+                    <request_method>1</request_method>
+                    <allow_traps>0</allow_traps>
+                    <ssl_cert_file/>
+                    <ssl_key_file/>
+                    <ssl_key_password/>
+                    <verify_peer>0</verify_peer>
+                    <verify_host>0</verify_host>
+                    <lld_macro_paths>
+                        <lld_macro_path>
+                            <lld_macro>{#DOMAIN_NAME}</lld_macro>
+                            <path>$.d_name</path>
+                        </lld_macro_path>
+                    </lld_macro_paths>
+                    <preprocessing>
+                        <step>
+                            <type>21</type>
+                            <params>var urls = JSON.parse(value);
+var dom_names = [];
+for (var i = 0; i &lt; urls.length; i++) {
+    var j = urls[i].url.split('.');
+    var dn = j[j.length - 2] + '.' + j[j.length - 1];
+    if (dom_names.indexOf(dn) == -1) {
+        dom_names.push(dn);
+    }
+}
+var dnames = [];
+for (var i = 0; i &lt; dom_names.length; i++) {
+    dnames.push({'d_name': dom_names[i]});
+}
+return JSON.stringify(dnames);</params>
+                            <error_handler>0</error_handler>
+                            <error_handler_params/>
+                        </step>
+                    </preprocessing>
+                    <master_item/>
+                </discovery_rule>
+                <discovery_rule>
+                    <name>URLs discovery</name>
+                    <type>10</type>
+                    <snmp_community/>
+                    <snmp_oid/>
+                    <key>list.sh[&quot;ssl_check.json&quot;]</key>
+                    <delay>1h</delay>
+                    <status>0</status>
+                    <allowed_hosts/>
+                    <snmpv3_contextname/>
+                    <snmpv3_securityname/>
+                    <snmpv3_securitylevel>0</snmpv3_securitylevel>
+                    <snmpv3_authprotocol>0</snmpv3_authprotocol>
+                    <snmpv3_authpassphrase/>
+                    <snmpv3_privprotocol>0</snmpv3_privprotocol>
+                    <snmpv3_privpassphrase/>
+                    <params/>
+                    <ipmi_sensor/>
+                    <authtype>0</authtype>
+                    <username/>
+                    <password/>
+                    <publickey/>
+                    <privatekey/>
+                    <port/>
+                    <filter>
+                        <evaltype>0</evaltype>
+                        <formula/>
+                        <conditions/>
+                    </filter>
+                    <lifetime>60d</lifetime>
+                    <description/>
+                    <item_prototypes>
+                        <item_prototype>
+                            <name>HTTPS Service on {#URL}:{#PORT} is running</name>
+                            <type>3</type>
+                            <snmp_community/>
+                            <snmp_oid/>
+                            <key>net.tcp.service[https,{#URL},{#PORT}]</key>
+                            <delay>5m</delay>
+                            <history>10d</history>
+                            <trends>730d</trends>
+                            <status>0</status>
+                            <value_type>3</value_type>
+                            <allowed_hosts/>
+                            <units/>
+                            <snmpv3_contextname/>
+                            <snmpv3_securityname/>
+                            <snmpv3_securitylevel>0</snmpv3_securitylevel>
+                            <snmpv3_authprotocol>0</snmpv3_authprotocol>
+                            <snmpv3_authpassphrase/>
+                            <snmpv3_privprotocol>0</snmpv3_privprotocol>
+                            <snmpv3_privpassphrase/>
+                            <params/>
+                            <ipmi_sensor/>
+                            <authtype>0</authtype>
+                            <username/>
+                            <password/>
+                            <publickey/>
+                            <privatekey/>
+                            <port/>
+                            <description/>
+                            <inventory_link>0</inventory_link>
+                            <applications>
+                                <application>
+                                    <name>HTTPS Service</name>
+                                </application>
+                            </applications>
+                            <valuemap>
+                                <name>Service state</name>
+                            </valuemap>
+                            <logtimefmt/>
+                            <preprocessing/>
+                            <jmx_endpoint/>
+                            <timeout>3s</timeout>
+                            <url/>
+                            <query_fields/>
+                            <posts/>
+                            <status_codes>200</status_codes>
+                            <follow_redirects>1</follow_redirects>
+                            <post_type>0</post_type>
+                            <http_proxy/>
+                            <headers/>
+                            <retrieve_mode>0</retrieve_mode>
+                            <request_method>1</request_method>
+                            <output_format>0</output_format>
+                            <allow_traps>0</allow_traps>
+                            <ssl_cert_file/>
+                            <ssl_key_file/>
+                            <ssl_key_password/>
+                            <verify_peer>0</verify_peer>
+                            <verify_host>0</verify_host>
+                            <application_prototypes/>
+                            <master_item/>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>SSL certificate validity {#URL}:{#PORT}</name>
+                            <type>10</type>
+                            <snmp_community/>
+                            <snmp_oid/>
+                            <key>zext_ssl_cert.sh[-d,{#URL},{#PORT}]</key>
+                            <delay>1h</delay>
+                            <history>10d</history>
+                            <trends>730d</trends>
+                            <status>0</status>
+                            <value_type>3</value_type>
+                            <allowed_hosts/>
+                            <units>day(s)</units>
+                            <snmpv3_contextname/>
+                            <snmpv3_securityname/>
+                            <snmpv3_securitylevel>0</snmpv3_securitylevel>
+                            <snmpv3_authprotocol>0</snmpv3_authprotocol>
+                            <snmpv3_authpassphrase/>
+                            <snmpv3_privprotocol>0</snmpv3_privprotocol>
+                            <snmpv3_privpassphrase/>
+                            <params/>
+                            <ipmi_sensor/>
+                            <authtype>0</authtype>
+                            <username/>
+                            <password/>
+                            <publickey/>
+                            <privatekey/>
+                            <port/>
+                            <description/>
+                            <inventory_link>0</inventory_link>
+                            <applications>
+                                <application>
+                                    <name>SSL Checks</name>
+                                </application>
+                            </applications>
+                            <valuemap/>
+                            <logtimefmt/>
+                            <preprocessing/>
+                            <jmx_endpoint/>
+                            <timeout>3s</timeout>
+                            <url/>
+                            <query_fields/>
+                            <posts/>
+                            <status_codes>200</status_codes>
+                            <follow_redirects>1</follow_redirects>
+                            <post_type>0</post_type>
+                            <http_proxy/>
+                            <headers/>
+                            <retrieve_mode>0</retrieve_mode>
+                            <request_method>1</request_method>
+                            <output_format>0</output_format>
+                            <allow_traps>0</allow_traps>
+                            <ssl_cert_file/>
+                            <ssl_key_file/>
+                            <ssl_key_password/>
+                            <verify_peer>0</verify_peer>
+                            <verify_host>0</verify_host>
+                            <application_prototypes/>
+                            <master_item/>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>SSL certificate issuer {#URL}:{#PORT}</name>
+                            <type>10</type>
+                            <snmp_community/>
+                            <snmp_oid/>
+                            <key>zext_ssl_cert.sh[-i,{#URL},{#PORT}]</key>
+                            <delay>1h</delay>
+                            <history>10d</history>
+                            <trends>0</trends>
+                            <status>0</status>
+                            <value_type>3</value_type>
+                            <allowed_hosts/>
+                            <units/>
+                            <snmpv3_contextname/>
+                            <snmpv3_securityname/>
+                            <snmpv3_securitylevel>0</snmpv3_securitylevel>
+                            <snmpv3_authprotocol>0</snmpv3_authprotocol>
+                            <snmpv3_authpassphrase/>
+                            <snmpv3_privprotocol>0</snmpv3_privprotocol>
+                            <snmpv3_privpassphrase/>
+                            <params/>
+                            <ipmi_sensor/>
+                            <authtype>0</authtype>
+                            <username/>
+                            <password/>
+                            <publickey/>
+                            <privatekey/>
+                            <port/>
+                            <description/>
+                            <inventory_link>0</inventory_link>
+                            <applications>
+                                <application>
+                                    <name>SSL Checks</name>
+                                </application>
+                            </applications>
+                            <valuemap/>
+                            <logtimefmt/>
+                            <preprocessing/>
+                            <jmx_endpoint/>
+                            <timeout/>
+                            <url/>
+                            <query_fields/>
+                            <posts/>
+                            <status_codes>200</status_codes>
+                            <follow_redirects>1</follow_redirects>
+                            <post_type>0</post_type>
+                            <http_proxy/>
+                            <headers/>
+                            <retrieve_mode>0</retrieve_mode>
+                            <request_method>1</request_method>
+                            <output_format>0</output_format>
+                            <allow_traps>0</allow_traps>
+                            <ssl_cert_file/>
+                            <ssl_key_file/>
+                            <ssl_key_password/>
+                            <verify_peer>0</verify_peer>
+                            <verify_host>0</verify_host>
+                            <application_prototypes/>
+                            <master_item/>
+                        </item_prototype>
+                    </item_prototypes>
+                    <trigger_prototypes>
+                        <trigger_prototype>
+                            <expression>{Template SSL check LLD:net.tcp.service[https,{#URL},{#PORT}].nodata(210m)}=1</expression>
+                            <recovery_mode>0</recovery_mode>
+                            <recovery_expression/>
+                            <name>Failed to establish SSL connection on {#URL}:{#PORT} in last 3 hours</name>
+                            <correlation_mode>0</correlation_mode>
+                            <correlation_tag/>
+                            <url/>
+                            <status>0</status>
+                            <priority>4</priority>
+                            <description/>
+                            <type>0</type>
+                            <manual_close>0</manual_close>
+                            <dependencies/>
+                            <tags/>
+                        </trigger_prototype>
+                        <trigger_prototype>
+                            <expression>{Template SSL check LLD:net.tcp.service[https,{#URL},{#PORT}].max(#3)}=0</expression>
+                            <recovery_mode>0</recovery_mode>
+                            <recovery_expression/>
+                            <name>HTTPS service is down on {#URL}:{#PORT}</name>
+                            <correlation_mode>0</correlation_mode>
+                            <correlation_tag/>
+                            <url/>
+                            <status>0</status>
+                            <priority>3</priority>
+                            <description>Last value: {ITEM.LASTVALUE1}.&#13;
+HTTPS service is down on {#URL}:{#PORT}</description>
+                            <type>0</type>
+                            <manual_close>0</manual_close>
+                            <dependencies/>
+                            <tags/>
+                        </trigger_prototype>
+                        <trigger_prototype>
+                            <expression>{Template SSL check LLD:zext_ssl_cert.sh[-d,{#URL},{#PORT}].last()}&lt;0</expression>
+                            <recovery_mode>0</recovery_mode>
+                            <recovery_expression/>
+                            <name>SSL certificate on {#URL}:{#PORT} expired</name>
+                            <correlation_mode>0</correlation_mode>
+                            <correlation_tag/>
+                            <url/>
+                            <status>0</status>
+                            <priority>5</priority>
+                            <description/>
+                            <type>0</type>
+                            <manual_close>0</manual_close>
+                            <dependencies/>
+                            <tags/>
+                        </trigger_prototype>
+                        <trigger_prototype>
+                            <expression>{Template SSL check LLD:zext_ssl_cert.sh[-d,{#URL},{#PORT}].last()}&lt;7</expression>
+                            <recovery_mode>0</recovery_mode>
+                            <recovery_expression/>
+                            <name>SSL certificate on {#URL}:{#PORT} expires in less than 7 days</name>
+                            <correlation_mode>0</correlation_mode>
+                            <correlation_tag/>
+                            <url/>
+                            <status>0</status>
+                            <priority>4</priority>
+                            <description>Last value: {ITEM.LASTVALUE1}.&#13;
+SSL certificate on {#URL}:{#PORT} expires in less than week</description>
+                            <type>0</type>
+                            <manual_close>0</manual_close>
+                            <dependencies>
+                                <dependency>
+                                    <name>SSL certificate on {#URL}:{#PORT} expired</name>
+                                    <expression>{Template SSL check LLD:zext_ssl_cert.sh[-d,{#URL},{#PORT}].last()}&lt;0</expression>
+                                    <recovery_expression/>
+                                </dependency>
+                            </dependencies>
+                            <tags/>
+                        </trigger_prototype>
+                        <trigger_prototype>
+                            <expression>{Template SSL check LLD:zext_ssl_cert.sh[-d,{#URL},{#PORT}].last()}&lt;21</expression>
+                            <recovery_mode>0</recovery_mode>
+                            <recovery_expression/>
+                            <name>SSL certificate on {#URL}:{#PORT} expires in less than 21 days</name>
+                            <correlation_mode>0</correlation_mode>
+                            <correlation_tag/>
+                            <url/>
+                            <status>0</status>
+                            <priority>2</priority>
+                            <description>Last value: {ITEM.LASTVALUE1}.&#13;
+SSL certificate on {#URL}:{#PORT} expires in less than 3 week</description>
+                            <type>0</type>
+                            <manual_close>0</manual_close>
+                            <dependencies>
+                                <dependency>
+                                    <name>SSL certificate on {#URL}:{#PORT} expires in less than 7 days</name>
+                                    <expression>{Template SSL check LLD:zext_ssl_cert.sh[-d,{#URL},{#PORT}].last()}&lt;7</expression>
+                                    <recovery_expression/>
+                                </dependency>
+                            </dependencies>
+                            <tags/>
+                        </trigger_prototype>
+                    </trigger_prototypes>
+                    <graph_prototypes/>
+                    <host_prototypes/>
+                    <jmx_endpoint/>
+                    <timeout>3s</timeout>
+                    <url/>
+                    <query_fields/>
+                    <posts/>
+                    <status_codes/>
+                    <follow_redirects>1</follow_redirects>
+                    <post_type>0</post_type>
+                    <http_proxy/>
+                    <headers/>
+                    <retrieve_mode>0</retrieve_mode>
+                    <request_method>1</request_method>
+                    <allow_traps>0</allow_traps>
+                    <ssl_cert_file/>
+                    <ssl_key_file/>
+                    <ssl_key_password/>
+                    <verify_peer>0</verify_peer>
+                    <verify_host>0</verify_host>
+                    <lld_macro_paths>
+                        <lld_macro_path>
+                            <lld_macro>{#PORT}</lld_macro>
+                            <path>$.port</path>
+                        </lld_macro_path>
+                        <lld_macro_path>
+                            <lld_macro>{#URL}</lld_macro>
+                            <path>$.url</path>
+                        </lld_macro_path>
+                    </lld_macro_paths>
+                    <preprocessing/>
+                    <master_item/>
+                </discovery_rule>
+            </discovery_rules>
+            <httptests/>
+            <macros/>
+            <templates/>
+            <screens/>
+            <tags/>
+        </template>
+    </templates>
+    <value_maps>
+        <value_map>
+            <name>Service state</name>
+            <mappings>
+                <mapping>
+                    <value>0</value>
+                    <newvalue>Down</newvalue>
+                </mapping>
+                <mapping>
+                    <value>1</value>
+                    <newvalue>Up</newvalue>
+                </mapping>
+            </mappings>
+        </value_map>
+    </value_maps>
+</zabbix_export>

@@ -152,7 +152,7 @@ HTTPS service is down on {#URL}:{#PORT}</description>
                             <trigger_prototypes>
                                 <trigger_prototype>
                                     <expression>{nodata(210m)}=1</expression>
-                                    <name>Falied to establish SSL connectoin on {#URL}:{#PORT} in last 3 hour</name>
+                                    <name>Failed to establish SSL connection on {#URL}:{#PORT} in last 3 hours</name>
                                     <status>DISABLED</status>
                                     <priority>HIGH</priority>
                                 </trigger_prototype>

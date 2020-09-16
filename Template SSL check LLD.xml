@@ -196,7 +196,7 @@ SSL certificate on {#URL}:{#PORT} expires in less than 3 week</description>
                             <delay>1h</delay>
                             <history>10d</history>
                             <trends>0</trends>
-                            <value_type>1</value_type>
+                            <value_type>CHAR</value_type>
                             <applications>
                                 <application>
                                     <name>SSL Checks</name>

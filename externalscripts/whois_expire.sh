@@ -1,22 +1,28 @@
 #!/bin/bash
 
+# Check to ensure argument has been passed.
 if [ $# -ne 1 ]; then
         echo "usage: $0 domain_name"
         exit 1
 fi
 
-domain=$1
-
-expiration_string=`whois "$domain" 2>&1 |  egrep -i 'Expiration|Expires on|Expiry date|paid-till' | head -1  | awk '{print $NF}'`
-if [ $? -ne 0 ]; then
-        echo "ERROR executing whois for the $domain domain - $expiration_string"
-        exit 1
+# Check to ensure whois is functional.
+if ! type -tP whois &> /dev/null
+then
+        echo "Please install whois."
+        exit 2
 fi
 
-expiration_epoch=`date --date="$expiration_string" '+%s'`
-rightnow_epoch=`date '+%s'`
+domain=$1
 
-seconds_left=`expr $expiration_epoch - $rightnow_epoch`
-days_left=`expr $seconds_left / 86400`
+# Check whois for the domain, filter out expire date, then awk filters the last field of the first line
+if expiration_string=$(whois "$domain" 2>&1 | grep -Ei 'Expiration|Expires on|Expiry date|paid-till' | awk 'NR==1{print $NF}'); then
+        expiration_epoch=$(date --date="$expiration_string" '+%s')
+        rightnow_epoch=$(date '+%s')
 
-echo $days_left
+        # Bash does lookups on arithmetic variables; no $ required.
+        echo "$(( (expiration_epoch - rightnow_epoch) / 86400 ))"
+else
+        echo "ERROR executing whois for the $domain domain - $expiration_string"
+        exit 3
+fi

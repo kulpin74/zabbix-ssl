@@ -1,4 +1,4 @@
-## Checking domain dame expiration date and SSL validity
+## Checking domain name expiration date and SSL validity
 The standard approach assumes creating a host for each checked name, which is inconvenient and redundant, since several names can be bound to one ip address.
 The concept of collecting all monitored names into one node has been implemented. LLD is used for discovery.
 

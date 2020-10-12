@@ -11,7 +11,7 @@
         <template>
             <template>Template SSL check LLD</template>
             <name>Template SSL check LLD</name>
-            <description>Find more about this template: https://github.com/kulpin74/zabbix-ssl<description/>
+            <description>Find more about this template: https://github.com/kulpin74/zabbix-ssl</description>
             <groups>
                 <group>
                     <name>Templates</name>

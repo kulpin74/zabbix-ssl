@@ -16,7 +16,7 @@ fi
 domain=$1
 
 # Check whois for the domain, filter out expire date, then awk filters the last field of the first line
-if expiration_string=$(whois "$domain" 2>&1 | grep -Ei 'Expiration|Expires on|Expiry date|paid-till|expires' | awk 'NR==1{print $NF}'); then
+if expiration_string=$(whois "$domain" 2>&1 | grep -Ei 'Expiration|Expires on|Expiry date|paid-till|expires' | grep -o -E '[0-9]{4}.[0-9]{2}.[0-9]{2}|[0-9]{2}/[0-9]{2}/[0-9]{4}' | awk 'NR == 1'); then
         expiration_epoch=$(date --date="$expiration_string" '+%s')
         rightnow_epoch=$(date '+%s')
 

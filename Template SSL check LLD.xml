@@ -144,6 +144,7 @@ HTTPS service is down on {#URL}:{#PORT}</description>
                             <delay>1h</delay>
                             <history>10d</history>
                             <trends>730d</trends>
+                            <value_type>FLOAT</value_type>
                             <units>day(s)</units>
                             <applications>
                                 <application>

@@ -338,7 +338,7 @@ return JSON.stringify(dnames);</params>
                             <history>10d</history>
                             <trends>730d</trends>
                             <status>0</status>
-                            <value_type>3</value_type>
+                            <value_type>0</value_type>
                             <allowed_hosts/>
                             <units>day(s)</units>
                             <snmpv3_contextname/>

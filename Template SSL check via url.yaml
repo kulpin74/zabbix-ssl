@@ -1,0 +1,157 @@
+zabbix_export:
+  version: '6.2'
+  date: '2023-03-26T10:25:27Z'
+  template_groups:
+    -
+      uuid: 7df96b18c230490a9a0a9e2307226338
+      name: Templates
+  templates:
+    -
+      uuid: bdd818f56d2a4de9851a7565a0e3480b
+      template: 'Template SSL check via url'
+      name: 'Template SSL check via url'
+      groups:
+        -
+          name: Templates
+      discovery_rules:
+        -
+          uuid: 4a7d95de117f4d1fbcd29cb4f7851b36
+          name: 'URLs discovery via URL'
+          type: HTTP_AGENT
+          key: urls_discovery
+          delay: 1h
+          lifetime: 60d
+          item_prototypes:
+            -
+              uuid: d32474cee6c74ce8a849ad5d8e6f1881
+              name: 'HTTP response code {#URL}:{#PORT}'
+              type: HTTP_AGENT
+              key: 'http.response200[{#URL},{#PORT}]'
+              delay: 5m
+              history: 10d
+              trends: 730d
+              preprocessing:
+                -
+                  type: REGEX
+                  parameters:
+                    - 'HTTP.*\s(\d+)\s.*'
+                    - \1
+              url: 'https://{#URL}'
+              status_codes: ''
+              retrieve_mode: HEADERS
+              tags:
+                -
+                  tag: Application
+                  value: 'HTTPS Service'
+              trigger_prototypes:
+                -
+                  uuid: 55f56b9f6916436bbc1aad99bbb2d64c
+                  expression: 'last(/Template SSL check via url/http.response200[{#URL},{#PORT}])>302'
+                  name: 'HTTP response not equal 200 on {#URL}:{#PORT}'
+                  url: 'https://{#URL}'
+                  priority: AVERAGE
+            -
+              uuid: a9397fed363a409c87cfd324e7452cfb
+              name: 'HTTPS Service on {#URL}:{#PORT} is running'
+              type: SIMPLE
+              key: 'net.tcp.service[https,{#URL},{#PORT}]'
+              delay: 5m
+              history: 10d
+              trends: 730d
+              valuemap:
+                name: 'Service state'
+              tags:
+                -
+                  tag: Application
+                  value: 'HTTPS Service'
+              trigger_prototypes:
+                -
+                  uuid: 7b9bedbfd5dc4781a3e8739f78ab5fa2
+                  expression: 'max(/Template SSL check via url/net.tcp.service[https,{#URL},{#PORT}],#3)=0'
+                  name: 'HTTPS service is down on {#URL}:{#PORT}'
+                  priority: AVERAGE
+                  description: |
+                    Last value: {ITEM.LASTVALUE1}.
+                    HTTPS service is down on {#URL}:{#PORT}
+            -
+              uuid: f4b74df735354cd19c511adc0f94adbb
+              name: 'SSL certificate validity {#URL}:{#PORT}'
+              type: EXTERNAL
+              key: 'zext_ssl_cert.sh[-d,{#URL},{#PORT}]'
+              delay: 1h
+              history: 10d
+              trends: 730d
+              value_type: FLOAT
+              units: day(s)
+              tags:
+                -
+                  tag: Application
+                  value: 'SSL Checks'
+              trigger_prototypes:
+                -
+                  uuid: 762f79d63fd947feb8fd6e7aa906f036
+                  expression: 'nodata(/Template SSL check via url/zext_ssl_cert.sh[-d,{#URL},{#PORT}],210m)=1'
+                  name: 'Falied to establish SSL connection on {#URL}:{#PORT} in last 3 hour'
+                  status: DISABLED
+                  priority: HIGH
+                -
+                  uuid: ce37ee46ef2c4b88b8fc20c024e2ec1d
+                  expression: 'last(/Template SSL check via url/zext_ssl_cert.sh[-d,{#URL},{#PORT}])<0'
+                  name: 'SSL certificate on {#URL}:{#PORT} expired'
+                  priority: DISASTER
+                -
+                  uuid: 38524bbf247e4e03b0086ac09eecb11c
+                  expression: 'last(/Template SSL check via url/zext_ssl_cert.sh[-d,{#URL},{#PORT}])<7'
+                  name: 'SSL certificate on {#URL}:{#PORT} expires in less than 7 days'
+                  priority: HIGH
+                  description: |
+                    Last value: {ITEM.LASTVALUE1}.
+                    SSL certificate on {#URL}:{#PORT} expires in less than week
+                  dependencies:
+                    -
+                      name: 'SSL certificate on {#URL}:{#PORT} expired'
+                      expression: 'last(/Template SSL check via url/zext_ssl_cert.sh[-d,{#URL},{#PORT}])<0'
+                -
+                  uuid: 03a8f940f68846c7b19bca34966427f5
+                  expression: 'last(/Template SSL check via url/zext_ssl_cert.sh[-d,{#URL},{#PORT}])<21'
+                  name: 'SSL certificate on {#URL}:{#PORT} expires in less than 21 days'
+                  priority: WARNING
+                  description: |
+                    Last value: {ITEM.LASTVALUE1}.
+                    SSL certificate on {#URL}:{#PORT} expires in less than 3 week
+                  dependencies:
+                    -
+                      name: 'SSL certificate on {#URL}:{#PORT} expires in less than 7 days'
+                      expression: 'last(/Template SSL check via url/zext_ssl_cert.sh[-d,{#URL},{#PORT}])<7'
+            -
+              uuid: ebef63dced08458195b370387364cbc6
+              name: 'SSL certificate issuer {#URL}:{#PORT}'
+              type: EXTERNAL
+              key: 'zext_ssl_cert.sh[-i,{#URL},{#PORT}]'
+              delay: 1h
+              history: 10d
+              trends: '0'
+              value_type: CHAR
+              tags:
+                -
+                  tag: Application
+                  value: 'SSL Checks'
+          url: 'https://raw.githubusercontent.com/kulpin74/zabbix-ssl/master/externalscripts/ssl_check.json'
+          lld_macro_paths:
+            -
+              lld_macro: '{#PORT}'
+              path: $.port
+            -
+              lld_macro: '{#URL}'
+              path: $.url
+      valuemaps:
+        -
+          uuid: ebef63dced08458195b370387364cbc6
+          name: 'Service state'
+          mappings:
+            -
+              value: '0'
+              newvalue: Down
+            -
+              value: '1'
+              newvalue: Up

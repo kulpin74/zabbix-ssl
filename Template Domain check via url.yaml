@@ -1,0 +1,77 @@
+zabbix_export:
+  version: '6.2'
+  date: '2023-03-26T10:25:27Z'
+  template_groups:
+    -
+      uuid: 7df96b18c230490a9a0a9e2307226338
+      name: Templates
+  templates:
+    -
+      uuid: 5e1c006f4b67440590f8f2191f204228
+      template: 'Template Domain check via url'
+      name: 'Template Domain check via url'
+      groups:
+        -
+          name: Templates
+      discovery_rules:
+        -
+          uuid: 27d1c7fa874647dc850c2f2ccb4157f5
+          name: 'Domains discovery via URL'
+          type: HTTP_AGENT
+          key: domain_names_discovery
+          delay: 1h
+          lifetime: 60d
+          item_prototypes:
+            - uuid: 26507c9c412d413f9d7493a525a18f5d
+              name: 'Domain {#DOMAIN_NAME} expire in'
+              type: EXTERNAL
+              key: 'whois_expire.sh[{#DOMAIN_NAME}]'
+              delay: 1d
+              trends: 730d
+              units: day(s)
+              tags:
+                - tag: Application
+                  value: 'Domain checks'
+              trigger_prototypes:
+                - uuid: 8b556aeaf0684636a556045aae2d2dc8
+                  expression: 'last(/Template Domain check via url/whois_expire.sh[{#DOMAIN_NAME}])<=0'
+                  name: 'Domain {#DOMAIN_NAME} expired'
+                  priority: DISASTER
+                - uuid: 27bd382372104e14a167834a74ef2af0
+                  expression: 'last(/Template Domain check via url/whois_expire.sh[{#DOMAIN_NAME}])<14'
+                  name: 'Domain {#DOMAIN_NAME} will expire in 14 days'
+                  priority: HIGH
+                  dependencies:
+                    - name: 'Domain {#DOMAIN_NAME} expired'
+                      expression: 'last(/Template Domain check via url/whois_expire.sh[{#DOMAIN_NAME}])<=0'
+                - uuid: 077a856aa78f4bd4913c93b01d20e234
+                  expression: 'last(/Template Domain check via url/whois_expire.sh[{#DOMAIN_NAME}])<30'
+                  name: 'Domain {#DOMAIN_NAME} will expire in 30 days'
+                  priority: WARNING
+                  dependencies:
+                    - name: 'Domain {#DOMAIN_NAME} will expire in 14 days'
+                      expression: 'last(/Template Domain check via url/whois_expire.sh[{#DOMAIN_NAME}])<14'
+          url: 'https://raw.githubusercontent.com/kulpin74/zabbix-ssl/master/externalscripts/ssl_check.json'
+          lld_macro_paths:
+            -
+              lld_macro: '{#DOMAIN_NAME}'
+              path: $.domain_name
+          preprocessing:
+            -
+              type: JAVASCRIPT
+              parameters:
+                - |
+                  var urls = JSON.parse(value);
+                  var dom_names = [];
+                  for (var i = 0; i < urls.length; i++) {
+                      var j = urls[i].url.split('.');
+                      var dn = j[j.length - 2] + '.' + j[j.length - 1];
+                      if (dom_names.indexOf(dn) == -1) {
+                          dom_names.push(dn);
+                      }
+                  }
+                  var dnames = [];
+                  for (var i = 0; i < dom_names.length; i++) {
+                      dnames.push({'domain_name': dom_names[i]});
+                  }
+                  return JSON.stringify(dnames);

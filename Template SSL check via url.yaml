@@ -136,6 +136,28 @@ zabbix_export:
                 -
                   tag: Application
                   value: 'SSL Checks'
+            -
+              uuid: f55ae13ed7c945c8ba253199b46781a8
+              name: 'SSL certificate fingerprint SHA256 {#URL}:{#PORT}'
+              type: EXTERNAL
+              key: 'zext_ssl_cert.sh[-f,{#URL},{#PORT}]'
+              delay: 1h
+              history: 31d
+              trends: '0'
+              value_type: CHAR
+              tags:
+                -
+                  tag: Application
+                  value: 'SSL Checks'
+              trigger_prototypes:
+                -
+                  uuid: 9aa3d6bfbf5745e19be2255c013b723e
+                  expression: 'change(/Template SSL check via file/zext_ssl_cert.sh[-f,{#URL},{#PORT}])<>0'
+                  name: 'SSL certificate fingerprint changed on {#URL}:{#PORT}'
+                  priority: WARNING
+                  description: |
+                    SSL certificate SHA-256 fingerprint changed on {#URL}:{#PORT}.
+                    This usually means a certificate renewal or replacement occurred.
           url: 'https://raw.githubusercontent.com/kulpin74/zabbix-ssl/master/externalscripts/ssl_check.json'
           lld_macro_paths:
             -

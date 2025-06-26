@@ -10,7 +10,7 @@ For this task you can use one of two template:
 * `Template Domain check via file` - it used for getting domain names from file
 * `Template Domain check via url` - it used for getting domain names from url
 
-### Checking SSL validity
+### Checking SSL validity and certificate changes (fingerprint)
 
 For this task you can use one of two template: 
 * `Template SSL check via file` - it used for getting domain names from file
@@ -43,7 +43,7 @@ In the file `ssl_check.json` enter data for monitoring.
 * `Template Domain check via file` - для получения списка доменных имен из файла
 * `Template Domain check via url` - для получения списка доменных имен из url
 
-### Проверка действительности SSL сертификатов
+### Проверка действительности SSL и изменений сертификатов (отпечаток)
 
 Для этой задачи используется один из двух шаблонов:
 * `Template SSL check via file` - для получения списка доменных имен из файла
